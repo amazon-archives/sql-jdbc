@@ -431,12 +431,13 @@ The driver will be available through standard open source repositories for Java 
 
 ## Building from source
 
+The driver is built as a shadow jar so that its dependencies are bundled within itself. This way no additional libraries besides the driver jar need to be placed on an application classpath for the driver to be used. The namespaces of the bundled dependencies are modified to ensure they do not conflict with other classes on the application classpath.  
+
 ### Run unit tests and build the driver jar
 
 ```
-./gradlew build
+./gradlew clean test shadowJar
 ```
-
 
 ### Build the driver jar without unit tests
 
