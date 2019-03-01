@@ -1,0 +1,22 @@
+## 2019-01-31, Version 1.0.0 (Current)
+
+
+### New Features
+
+This is the first release of OpenES-JDBC.
+
+OpenES-JDBC provides a driver for JDBC connectivity for OpenES-SQL. The driver has been developed from scratch and offers the following features in this initial release:
+
+* JDBC API implementation as per JDBC 4.2 specifications
+* java.sql.DriverManager and javax.sql.DataSource interface implementation for creating JDBC connections to Elasticsearch clusters running with OpenES-SQL plugin
+* java.sql.Statement implementation to allow creation and submission of SQL queries to OpenES-SQL
+* java.sql.ResultSet and java.sql.ResultSetMetadata implementation for parsing query results
+* java.sql.PreparedStatement implementation for creation and submission of parameterized SQL queries to OpenES-SQL
+* Support for HTTP BASIC and AWS SIGV4 authentication mechanisms
+* Full support for Elasticsearch Datatypes: BOOLEAN, BYTE, SHORT, INTEGER, LONG, HALF_FLOAT, FLOAT, DOUBLE, SCALED_FLOAT, KEYWORD, TEXT
+* Support Elasticsearch DATE data type with some limitations
+
+
+### Commits
+The code has been developed from scratch so their are numerous commits over the course of development work. 
+A single squash commit shall be created for the first release.
