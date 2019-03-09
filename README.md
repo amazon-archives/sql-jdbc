@@ -1,6 +1,6 @@
-## OpenDistro for ElasticSearch - JDBC
+## Open Distro for ElasticSearch - JDBC
 
-This is the driver for JDBC connectivity to a cluster running with OpenDistro for Elasticsearch SQL support.
+This is the driver for JDBC connectivity to a cluster running with Open Distro for Elasticsearch SQL support.
 
 ## Specifications
 
@@ -13,7 +13,7 @@ Java application that needs to use it.
 
 If using with JDBC compatible BI tools, refer the tool documentation on configuring a new JDBC driver. Typically,
 all that's required is to make the tool aware of the location of the driver jar and then use it to setup database (i.e
-elasticsearch) connections.
+Elasticsearch) connections.
 
 ### Connection URL and other settings
 To setup a connection, the driver requires a JDBC connection URL. The connection URL is of the form:
@@ -451,6 +451,15 @@ The driver is built as a shadow jar so that its dependencies are bundled within 
 ./gradlew publishToMavenLocal
 ```
 
+## Documentation
+
+Please refer to the [documentation](https://opendistro.github.io/for-elasticsearch-docs) for detailed information on installing and configuring opendistro-elasticsearch-security plugin.
+
 ## License
 
 This library is licensed under the Apache 2.0 License. 
+
+## Copyright
+Open Distro For Elasticsearch Security Copyright 2019- Amazon.com, Inc. or its affiliates. All Rights Reserved.
+
+
