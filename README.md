@@ -460,6 +460,7 @@ Please refer to the [documentation](https://opendistro.github.io/for-elasticsear
 This library is licensed under the Apache 2.0 License. 
 
 ## Copyright
+
 Open Distro For Elasticsearch Security Copyright 2019- Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 
