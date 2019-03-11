@@ -16,6 +16,7 @@ all that's required is to make the tool aware of the location of the driver jar 
 Elasticsearch) connections.
 
 ### Connection URL and other settings
+
 To setup a connection, the driver requires a JDBC connection URL. The connection URL is of the form:
 ```
     jdbc:elasticsearch://[scheme:][host][:port][/context-path]?[property-key=value]&[property-key2=value2]..&[property-keyN=valueN]
@@ -453,14 +454,23 @@ The driver is built as a shadow jar so that its dependencies are bundled within 
 
 ## Documentation
 
-Please refer to the [documentation](https://opendistro.github.io/for-elasticsearch-docs) for detailed information on installing and configuring opendistro-elasticsearch-security plugin.
+Please refer to the [documentation](https://opendistro.github.io/for-elasticsearch-docs/) for detailed information on installing and configuring opendistro-elasticsearch-security plugin.
 
-## License
+## Code of Conduct
 
-This code is licensed under the Apache 2.0 License. 
+This project has adopted an [Open Source Code of Conduct](https://opendistro.github.io/for-elasticsearch/codeofconduct.html).
+
+
+## Security issue notifications
+
+If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public GitHub issue.
+
+
+## Licensing
+
+See the [LICENSE](./LICENSE) file for our project's licensing. We will ask you to confirm the licensing of your contribution.
 
 ## Copyright
 
 Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-
 
