@@ -68,14 +68,14 @@ To setup a connection, the driver requires a JDBC connection URL. The connection
   | trustStoreType     | type of the truststore | valid truststore type recognized by available Java security providers | JKS |
   | trustStorePassword | password to access the Trust Store | any string | `null` |
   | keyStoreLocation   | location of the SSL/TLS keystore to use | file path or URL as appropriate to the type of keystore | `null` |
-  | keyStoreType       | type of the keystore | valid keystore type recognixed by available Java security providers | JKS |
+  | keyStoreType       | type of the keystore | valid keystore type recognized by available Java security providers | JKS |
   | keyStorePassword   | password to access the keystore | any string | `null` |
   | trustSelfSigned    | shortcut way to indicate that any self-signed certificate should be accepted. A truststore is not required to be configured. | `true` or `false` | `false` |
   | hostnameVerification    | indicate whether certificate hostname verification should be performed when using SSL/TLS | `true` or `false` | `true` |
 
 ### Connecting using the DriverManager interface
 
-The main Driver class is `Driver`. If the driver jar is on the application classpath, no other configuration is required.
+The main Driver class is `com.amazon.opendistroforelasticsearch.jdbc.Driver`. If the driver jar is on the application classpath, no other configuration is required.
 
 Code samples to open a connection for some typical scenarios are given below:
 
