@@ -11,7 +11,7 @@ The driver is compatible with JDBC 4.2 specification and requires a minimum of J
 The driver comes in the form of a single jar file. To use it, simply place it on the classpath of the
 Java application that needs to use it.
 
-If using with JDBC compatible BI tools, refer the tool documentation on configuring a new JDBC driver. Typically,
+If using with JDBC compatible BI tools, refer to the tool documentation on configuring a new JDBC driver. Typically,
 all that's required is to make the tool aware of the location of the driver jar and then use it to setup database (i.e
 Elasticsearch) connections.
 
