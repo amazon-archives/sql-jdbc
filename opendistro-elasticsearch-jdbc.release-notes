@@ -1,7 +1,14 @@
-## 2019-01-31, Version 1.0.0 (Current)
+
+## 2019-04-02, Version 0.8.0 (Current)
+
+### Notable Changes
+
+* Feature [#4](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/4): Add support for Elasticsearch 6.6
 
 
-### New Features
+## 2019-03-11, Version 0.7.0
+
+### Notable Changes
 
 This is the first release of OpenES-JDBC.
 
