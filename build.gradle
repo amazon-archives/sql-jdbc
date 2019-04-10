@@ -26,6 +26,7 @@ plugins {
     id 'jacoco'
     id 'maven'
     id 'maven-publish'
+    id 'signing'
 }
 
 group 'com.amazon.opendistroforelasticsearch.client'
@@ -115,6 +116,35 @@ publishing {
             project.shadow.component(publication)
             artifact sourcesJar
         }
+        sonatype(MavenPublication) { publication ->
+            project.shadow.component(publication)
+            artifact sourcesJar
+
+            pom {
+              name = "ElasticSearch SQL JDBC"
+              packaging = "jar"
+              url = "https://github.com/opendistro-for-elasticsearch/sql-jdbc"
+              description = "Driver for JDBC connectivity to a cluster running with Open Distro for Elasticsearch SQL support"
+              scm {
+                connection = "scm:git@github.com:opendistro-for-elasticsearch/sql-jdbc.git"
+                developerConnection = "scm:git@github.com:opendistro-for-elasticsearch/sql-jdbc.git"
+                url = "git@github.com:opendistro-for-elasticsearch/sql-jdbc.git"
+              }
+              licenses {
+                license {
+                  name = "The Apache License, Version 2.0"
+                  url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                }
+              }
+              developers {
+                developer {
+                  id = "amazonwebservices"
+                  organization = "Amazon Web Services"
+                  organizationUrl = "https://aws.amazon.com"
+                }
+              }
+            }
+        }
     }
 
     repositories {
@@ -132,9 +162,22 @@ publishing {
                 awsIm(AwsImAuthentication) // load from EC2 role or env var
             }
         }
+        maven {
+            name = "sonatype-staging"
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
+                password project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
+            }
+        }
     }
 
     // TODO - enabled debug logging for the time being, remove this eventually
     gradle.startParameter.setShowStacktrace(ShowStacktrace.ALWAYS)
     gradle.startParameter.setLogLevel(LogLevel.DEBUG)
 }
+
+signing {
+    sign publishing.publications.sonatype
+}
+
