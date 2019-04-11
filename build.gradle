@@ -110,15 +110,17 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
 }
 
+task javadocJar(type: Jar) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
 publishing {
     publications {
         shadow(MavenPublication) { publication ->
             project.shadow.component(publication)
             artifact sourcesJar
-        }
-        sonatype(MavenPublication) { publication ->
-            project.shadow.component(publication)
-            artifact sourcesJar
+            artifact javadocJar
 
             pom {
               name = "ElasticSearch SQL JDBC"
@@ -178,6 +180,7 @@ publishing {
 }
 
 signing {
-    sign publishing.publications.sonatype
+    required { gradle.taskGraph.hasTask("publishShadowPublicationToSonatype-stagingRepository") }
+    sign publishing.publications.shadow
 }
 
