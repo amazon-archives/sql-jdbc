@@ -26,6 +26,7 @@ plugins {
     id 'jacoco'
     id 'maven'
     id 'maven-publish'
+    id 'signing'
 }
 
 group 'com.amazon.opendistroforelasticsearch.client'
@@ -109,11 +110,42 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
 }
 
+task javadocJar(type: Jar) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
 publishing {
     publications {
         shadow(MavenPublication) { publication ->
             project.shadow.component(publication)
             artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+              name = "ElasticSearch SQL JDBC"
+              packaging = "jar"
+              url = "https://github.com/opendistro-for-elasticsearch/sql-jdbc"
+              description = "Driver for JDBC connectivity to a cluster running with Open Distro for Elasticsearch SQL support"
+              scm {
+                connection = "scm:git@github.com:opendistro-for-elasticsearch/sql-jdbc.git"
+                developerConnection = "scm:git@github.com:opendistro-for-elasticsearch/sql-jdbc.git"
+                url = "git@github.com:opendistro-for-elasticsearch/sql-jdbc.git"
+              }
+              licenses {
+                license {
+                  name = "The Apache License, Version 2.0"
+                  url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                }
+              }
+              developers {
+                developer {
+                  id = "amazonwebservices"
+                  organization = "Amazon Web Services"
+                  organizationUrl = "https://aws.amazon.com"
+                }
+              }
+            }
         }
     }
 
@@ -132,9 +164,23 @@ publishing {
                 awsIm(AwsImAuthentication) // load from EC2 role or env var
             }
         }
+        maven {
+            name = "sonatype-staging"
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
+                password project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
+            }
+        }
     }
 
     // TODO - enabled debug logging for the time being, remove this eventually
     gradle.startParameter.setShowStacktrace(ShowStacktrace.ALWAYS)
     gradle.startParameter.setLogLevel(LogLevel.DEBUG)
 }
+
+signing {
+    required { gradle.taskGraph.hasTask("publishShadowPublicationToSonatype-stagingRepository") }
+    sign publishing.publications.shadow
+}
+
