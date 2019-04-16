@@ -123,10 +123,10 @@ publishing {
             artifact javadocJar
 
             pom {
-              name = "ElasticSearch SQL JDBC"
+              name = "Open Distro For Elasticsearch SQL JDBC Driver"
               packaging = "jar"
               url = "https://github.com/opendistro-for-elasticsearch/sql-jdbc"
-              description = "Driver for JDBC connectivity to a cluster running with Open Distro for Elasticsearch SQL support"
+              description = "Open Distro For Elasticsearch SQL JDBC driver"
               scm {
                 connection = "scm:git@github.com:opendistro-for-elasticsearch/sql-jdbc.git"
                 developerConnection = "scm:git@github.com:opendistro-for-elasticsearch/sql-jdbc.git"
