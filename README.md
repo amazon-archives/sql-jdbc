@@ -19,7 +19,7 @@ Elasticsearch) connections.
 
 To setup a connection, the driver requires a JDBC connection URL. The connection URL is of the form:
 ```
-    jdbc:elasticsearch://[scheme:][host][:port][/context-path]?[property-key=value]&[property-key2=value2]..&[property-keyN=valueN]
+    jdbc:elasticsearch://[scheme://][host][:port][/context-path]?[property-key=value]&[property-key2=value2]..&[property-keyN=valueN]
 ```
 
 
