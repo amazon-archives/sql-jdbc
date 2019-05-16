@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Supports returning a java.sql.Timestamp from a String in the
@@ -72,6 +73,19 @@ public class TimestampType implements TypeHelper<Timestamp> {
             // Make some effort to understand ISO format
             if (value.length() > 11 && value.charAt(10) == 'T') {
                 value = value.replace('T', ' ');
+            }
+            // Timestamp.valueOf() does not like timezone information
+            if (value.length() > 23) {
+                if (value.length() == 24 && value.charAt(23) == 'Z') {
+                    value = value.substring(0, 23);
+                }
+                else if (value.charAt(23) == '+' || value.charAt(23) == '-') {
+                    // 'calendar' parameter takes precedence
+                    if (calendar == null) {
+                        calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT" + value.substring(23)));
+                    }
+                    value = value.substring(0, 23);
+                }
             }
 
             if (calendar == null) {

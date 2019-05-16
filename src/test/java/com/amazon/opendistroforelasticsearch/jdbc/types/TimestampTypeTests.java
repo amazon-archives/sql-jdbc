@@ -48,7 +48,11 @@ public class TimestampTypeTests {
     @CsvSource(value = {
             "2009-06-16T07:28:52.333, 1245137332333",
             "2015-01-01 00:34:46,     1420072486000",
-            "2015-01-01 00:34:46.778, 1420072486778"
+            "2015-01-01 00:34:46.778, 1420072486778",
+            "2015-01-01 00:34:46.778+00:00, 1420072486778",
+            "2015-01-01 00:34:46.778Z, 1420072486778",
+            "2015-01-01T00:34:46.778+01:00, 1420068886778",
+            "2015-01-01 00:34:46.778-02, 1420079686778",
     })
     void testTimestampFromStringDefaultTZ(String stringValue, long longValue) {
         Timestamp timestamp = Assertions.assertDoesNotThrow(
