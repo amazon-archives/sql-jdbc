@@ -76,13 +76,13 @@ public class TimestampType implements TypeHelper<Timestamp> {
             }
             // Timestamp.valueOf() does not like timezone information
             if (value.length() > 23) {
-                if(value.length() == 24 && value.charAt(23) == 'Z') {
+                if (value.length() == 24 && value.charAt(23) == 'Z') {
                     value = value.substring(0, 23);
                 }
-                else if(value.charAt(23) == '+' || value.charAt(23) == '-') {
+                else if (value.charAt(23) == '+' || value.charAt(23) == '-') {
                     // 'calendar' parameter takes precedence
-                    if(calendar==null) {
-                        calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"+value.substring(23)));
+                    if (calendar == null) {
+                        calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT" + value.substring(23)));
                     }
                     value = value.substring(0, 23);
                 }
