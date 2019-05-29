@@ -1217,7 +1217,9 @@ public class DatabaseMetaDataImpl implements DatabaseMetaData, JdbcWrapper, Logg
         ColumnMetadataStatement(ConnectionImpl connection, String tableNamePattern, String columnNamePattern, Logger log)
                 throws SQLException {
             // TODO - once sql plugin supports PreparedStatement fully, do this through a preparedStatement with params
-            super(connection, "DESCRIBE TABLES LIKE " + tableNamePattern + " COLUMNS LIKE " + columnNamePattern, log);
+            super(connection, "DESCRIBE TABLES LIKE " + tableNamePattern +
+                (columnNamePattern != null ? (" COLUMNS LIKE " + columnNamePattern) : ""),
+                log);
         }
 
         static class ColumnMetadataResultSet extends ResultSetImpl {
