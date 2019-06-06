@@ -1,5 +1,11 @@
+## 2019-06-06, Version 1.0.0 (Current)
 
-## 2019-04-19, Version 0.9.0 (Current)
+### Changes
+
+* Update to LocalDateTime conversion to Timestamp to support timezone [issue #6]
+* Updated the connection URL template in README.md
+
+## 2019-04-19, Version 0.9.0
 
 No update in this release.
 
