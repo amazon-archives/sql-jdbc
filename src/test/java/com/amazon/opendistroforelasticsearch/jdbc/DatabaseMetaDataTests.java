@@ -16,6 +16,7 @@
 
 package com.amazon.opendistroforelasticsearch.jdbc;
 
+import com.amazon.opendistroforelasticsearch.jdbc.DatabaseMetaDataImpl.ColumnMetadataStatement;
 import com.amazon.opendistroforelasticsearch.jdbc.config.ConnectionConfig;
 import com.amazon.opendistroforelasticsearch.jdbc.logging.NoOpLogger;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.ClusterMetadata;
@@ -366,6 +367,24 @@ public class DatabaseMetaDataTests {
         assertEmptySchemaResultSet(dbmd.getSchemas("some-cat", "%"));
         assertEmptySchemaResultSet(dbmd.getSchemas("mock-cluster", "some-schema"));
         assertEmptySchemaResultSet(dbmd.getSchemas(null, "some-schema"));
+    }
+    
+    @Test
+    void testGetColumnsWithoutColumnNamePattern() throws Exception {
+        Connection con = getMockConnection();
+        
+        ColumnMetadataStatement stmt = new ColumnMetadataStatement((ConnectionImpl)con, "TABLE_%", null, NoOpLogger.INSTANCE);
+        assertEquals("DESCRIBE TABLES LIKE TABLE_%", stmt.sql);
+        assertDoesNotThrow(stmt::close);
+    }
+    
+    @Test
+    void testGetColumnsWithColumnNamePattern() throws Exception {
+        Connection con = getMockConnection();
+        
+        ColumnMetadataStatement stmt = new ColumnMetadataStatement((ConnectionImpl)con, "TABLE_%", "COLUMN_%", NoOpLogger.INSTANCE);
+        assertEquals("DESCRIBE TABLES LIKE TABLE_% COLUMNS LIKE COLUMN_%", stmt.sql);
+        assertDoesNotThrow(stmt::close);
     }
 
     private void assertValidSchemaResultSet(ResultSet rs) throws SQLException {
