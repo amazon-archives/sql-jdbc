@@ -20,6 +20,7 @@ import com.amazon.opendistroforelasticsearch.jdbc.auth.AuthenticationType;
 import com.amazon.opendistroforelasticsearch.jdbc.logging.LogLevel;
 import com.amazon.opendistroforelasticsearch.jdbc.internal.util.AwsHostNameUtil;
 import com.amazon.opendistroforelasticsearch.jdbc.internal.util.UrlParser;
+import com.amazonaws.auth.AWSCredentialsProvider;
 
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
@@ -42,6 +43,7 @@ public class ConnectionConfig {
     private String password;
     private boolean requestCompression;
     private AuthenticationType authenticationType;
+    private AWSCredentialsProvider awsCredentialsProvider;
     private String region;
     private LogLevel logLevel;
 
@@ -72,6 +74,7 @@ public class ConnectionConfig {
 
         this.requestCompression = builder.getRequestCompressionProperty().getValue();
         this.authenticationType = builder.getAuthConnectionProperty().getValue();
+        this.awsCredentialsProvider = builder.getAwsCredentialProvider().getValue();
         this.region = builder.getRegionConnectionProperty().getValue();
 
         this.keyStoreLocation = builder.getKeyStoreLocationConnectionProperty().getValue();
@@ -139,6 +142,10 @@ public class ConnectionConfig {
         return authenticationType;
     }
 
+    public AWSCredentialsProvider getAwsCredentialsProvider() {
+        return awsCredentialsProvider;
+    }
+
     public String getRegion() {
         return region;
     }
@@ -194,6 +201,7 @@ public class ConnectionConfig {
                 ", password='" + mask(password) + '\'' +
                 ", requestCompression=" + requestCompression +
                 ", authenticationType=" + authenticationType +
+                ", awsCredentialsProvider=" + awsCredentialsProvider +
                 ", region='" + region + '\'' +
                 ", logLevel=" + logLevel +
                 ", keyStoreLocation='" + keyStoreLocation + '\'' +
@@ -244,6 +252,9 @@ public class ConnectionConfig {
         private TrustSelfSignedConnectionProperty trustSelfSignedConnectionProperty
                 = new TrustSelfSignedConnectionProperty();
 
+        private AwsCredentialsProviderProperty awsCredentialsProviderProperty
+                = new AwsCredentialsProviderProperty();
+
         private HostnameVerificationConnectionProperty hostnameVerificationConnectionProperty
                 = new HostnameVerificationConnectionProperty();
 
@@ -259,6 +270,7 @@ public class ConnectionConfig {
                 passwordProperty,
                 requestCompressionProperty,
                 authConnectionProperty,
+                awsCredentialsProviderProperty,
                 regionConnectionProperty,
                 keyStoreLocationConnectionProperty,
                 keyStorePasswordConnectionProperty,
@@ -320,6 +332,10 @@ public class ConnectionConfig {
 
         public AuthConnectionProperty getAuthConnectionProperty() {
             return authConnectionProperty;
+        }
+
+        public AwsCredentialsProviderProperty getAwsCredentialProvider() {
+            return awsCredentialsProviderProperty;
         }
 
         public RegionConnectionProperty getRegionConnectionProperty() {

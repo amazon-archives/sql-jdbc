@@ -65,6 +65,7 @@ public class DataSourceTests implements WireMockServerHelpers {
         assertNull(config.getUser());
         assertNull(config.getPassword());
         Assertions.assertEquals(AuthenticationType.NONE, config.getAuthenticationType());
+        assertNull(config.getAwsCredentialsProvider());
     }
 
     @Test
