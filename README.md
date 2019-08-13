@@ -61,6 +61,7 @@ To setup a connection, the driver requires a JDBC connection URL. The connection
   | logOutput | location where driver logs should be emitted | a valid file path     |    `null` (logs are disabled) |
   | logLevel | severity level for which driver logs should be emitted | in order from highest(least logging) to lowest(most logging): OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL  |    OFF (logs are disabled) |
   | auth     | authentication mechanism to use | `NONE` (no auth), `BASIC` (HTTP Basic), `AWS_SIGV4` (AWS SIGV4) | `basic` if username and/or password is specified, `NONE` otherwise |
+  | awsCredentialsProvider | The AWS credential provider to be used when authentication mechanism is `AWS_SIGV4` (AWS SIGV4). If not set, the driver will use DefaultAWSCredentialsProviderChain to sign the request. Note that the driver renamed the namespaces of its dependencies, so the value has to be an instance of com.amazonaws.opendistro.elasticsearch.sql.jdbc.shadow.com.amazonaws.auth.AWSCredentialsProvider| Instance of an AWSCredentialProvider | DefaultAWSCredentialsProviderChain |
   | region | if authentication type is `aws_sigv4`, then this is the region value to use when signing requests. Only needed if the driver can not determine the region for the host endpoint. The driver will detect the region if the host endpoint matches a known url pattern. | a valid AWS region value e.g. us-east-1 | `null` (auto-detected if possible from the host endpoint) |
   | requestCompression | whether to indicate acceptance of compressed (gzip) responses when making server requests | `true` or `false` | `false` |
   | useSSL   | whether to establish the connection over SSL/TLS | `true` or `false` | `false` if scheme is `http`, `true` if scheme is `https` |
@@ -254,6 +255,28 @@ Statement st = con.createStatement();
 con.close();
 ```
 
+* Connect to a remote host on default SSL port with AWS Sig V4 authentication, explicitly specifying the AWSCredentialProvider to use
+
+```
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+.
+.
+String url = "jdbc:elasticsearch://https://remote-host-name";
+
+Properties properties = new Properties();
+properties.put("awsCredentialsProvider", new EnvironmentVariableCredentialsProvider());
+
+Connection con = DriverManager.getConnection(url, properties);
+Statement st = con.createStatement();
+.
+// use the connection
+.
+// close connection
+con.close();
+```
+
 * Connect to a remote host on default SSL port with AWS Sig V4 authentication, explicitly specifying the region to use in the request signing.
 
 ```
@@ -391,6 +414,32 @@ String url = "jdbc:elasticsearch://https://remote-host-name?auth=aws_sigv4";
 
 ElasticsearchDataSource ds = new ElasticsearchDataSource();
 ds.setUrl(url);
+
+Connection con = ds.getConnection(url);
+Statement st = con.createStatement();
+.
+// use the connection
+.
+// close connection
+con.close();
+```
+
+* Connect to a remote host on default SSL port with AWS Sig V4 authentication, explicitly specifying the AWSCredentialProvider to use
+
+```
+import java.sql.Connection;
+import java.sql.Statement;
+import javax.sql.DataSource;
+
+import com.amazon.opendistroforelasticsearch.jdbc.ElasticsearchDataSource;
+
+.
+.
+String url = "jdbc:elasticsearch://https://remote-host-name?auth=aws_sigv4&region=us-west-1";
+
+ElasticsearchDataSource ds = new ElasticsearchDataSource();
+ds.setUrl(url);
+ds.setAwsCredentialProvider(new EnvironmentVariableCredentialsProvider());
 
 Connection con = ds.getConnection(url);
 Statement st = con.createStatement();

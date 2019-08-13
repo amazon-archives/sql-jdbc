@@ -19,6 +19,7 @@ package com.amazon.opendistroforelasticsearch.jdbc.config;
 import com.amazon.opendistroforelasticsearch.jdbc.auth.AuthenticationType;
 import com.amazon.opendistroforelasticsearch.jdbc.internal.util.UrlParser;
 import com.amazon.opendistroforelasticsearch.jdbc.logging.LogLevel;
+import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -269,6 +270,17 @@ class ConnectionConfigTests {
                 "region-value",
                 "us-gov-west-1",
                 "ap-southeast-2");
+    }
+
+    @Test
+    void testAwsCredentialsProviderConfig() {
+        assertPropertyRejectsValue(AwsCredentialsProviderProperty.KEY, "Invalid AWS Credentials Provider");
+
+        // The property accepts null and valid AWSCredentialProvider
+        assertPropertyAcceptsValue(AwsCredentialsProviderProperty.KEY, ConnectionConfig::getAwsCredentialsProvider,
+                null);
+        assertPropertyAcceptsValue(AwsCredentialsProviderProperty.KEY, ConnectionConfig::getAwsCredentialsProvider,
+                new EnvironmentVariableCredentialsProvider());
     }
 
     @Test

@@ -23,6 +23,7 @@ import com.amazon.opendistroforelasticsearch.jdbc.logging.LoggingSource;
 import com.amazon.opendistroforelasticsearch.jdbc.transport.TransportException;
 import com.amazon.opendistroforelasticsearch.jdbc.transport.http.auth.aws.AWSRequestSigningApacheInterceptor;
 import com.amazonaws.auth.AWS4Signer;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import org.apache.http.Header;
 import org.apache.http.auth.AuthScope;
@@ -73,7 +74,6 @@ public class ApacheHttpTransport implements HttpTransport, LoggingSource {
     private RequestConfig requestConfig;
     private CloseableHttpClient httpClient;
 
-
     public ApacheHttpTransport(ConnectionConfig connectionConfig, Logger log, String userAgent) throws TransportException {
         this.host = connectionConfig.getHost();
         this.port = connectionConfig.getPort();
@@ -122,11 +122,13 @@ public class ApacheHttpTransport implements HttpTransport, LoggingSource {
             signer.setServiceName("es");
             signer.setRegionName(connectionConfig.getRegion());
 
+            AWSCredentialsProvider provider = connectionConfig.getAwsCredentialsProvider() != null ?
+                    connectionConfig.getAwsCredentialsProvider() : new DefaultAWSCredentialsProviderChain();
             httpClientBuilder.addInterceptorLast(
                     new AWSRequestSigningApacheInterceptor(
                             "es",
                             signer,
-                            new DefaultAWSCredentialsProviderChain()));
+                            provider));
         }
 
         // TODO - can apply settings retry & backoff

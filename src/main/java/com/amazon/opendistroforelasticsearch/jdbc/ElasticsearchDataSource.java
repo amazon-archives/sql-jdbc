@@ -16,6 +16,7 @@
 
 package com.amazon.opendistroforelasticsearch.jdbc;
 
+import com.amazon.opendistroforelasticsearch.jdbc.config.AwsCredentialsProviderProperty;
 import com.amazon.opendistroforelasticsearch.jdbc.config.ConnectionConfig;
 import com.amazon.opendistroforelasticsearch.jdbc.config.LoginTimeoutConnectionProperty;
 import com.amazon.opendistroforelasticsearch.jdbc.config.PasswordConnectionProperty;
@@ -23,6 +24,7 @@ import com.amazon.opendistroforelasticsearch.jdbc.config.UserConnectionProperty;
 import com.amazon.opendistroforelasticsearch.jdbc.internal.JdbcWrapper;
 import com.amazon.opendistroforelasticsearch.jdbc.internal.util.UrlParser;
 import com.amazon.opendistroforelasticsearch.jdbc.logging.LoggingSource;
+import com.amazonaws.auth.AWSCredentialsProvider;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -121,6 +123,10 @@ public class ElasticsearchDataSource implements DataSource, JdbcWrapper, Logging
         } catch (URISyntaxException e) {
             throw new SQLException("Invalid connection URL", e);
         }
+    }
+    
+    public void setAwsCredentialProvider(AWSCredentialsProvider awsCredentialProvider) {
+        connectionProperties.put(AwsCredentialsProviderProperty.KEY, awsCredentialProvider);
     }
 
     /**
