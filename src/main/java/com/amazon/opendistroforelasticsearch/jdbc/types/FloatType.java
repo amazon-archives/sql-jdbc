@@ -52,7 +52,7 @@ public class FloatType extends NumberType<Float> {
     }
 
     private Float asFloat(Number value) throws SQLException {
-        return (float) getDoubleValueWithinBounds(value, Float.MIN_VALUE, Float.MAX_VALUE);
+        return (float) getDoubleValueWithinBounds(value, -Float.MAX_VALUE, Float.MAX_VALUE);
     }
 
     @Override
