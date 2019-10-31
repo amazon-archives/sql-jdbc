@@ -1,4 +1,11 @@
-## 2019-08-16, Version 1.2.0 (Current)
+## 2019-10-29, Version 1.3.0 (Current)
+
+### Changes
+
+* Elasticsearch 7.3.2 compatibility
+* BugFix: support negative float
+
+## 2019-08-16, Version 1.2.0
 
 ### Changes
 
