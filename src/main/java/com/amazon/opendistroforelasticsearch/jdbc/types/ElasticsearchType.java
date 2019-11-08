@@ -66,6 +66,7 @@ public enum ElasticsearchType {
     SCALED_FLOAT(JDBCType.DOUBLE, Double.class, 15, 25, true),
     KEYWORD(JDBCType.VARCHAR, String.class, 256, 0, false),
     TEXT(JDBCType.VARCHAR, String.class, Integer.MAX_VALUE, 0, false),
+    IP(JDBCType.VARCHAR, String.class, 15, 0, false),
     NESTED(JDBCType.STRUCT, null, 0, 0, false),
     DATE(JDBCType.TIMESTAMP, Timestamp.class, 24, 24, false),
     NULL(JDBCType.NULL, null, 0, 0, false),
