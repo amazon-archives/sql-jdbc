@@ -19,12 +19,12 @@ jobs:
       run: ./gradlew build
     
     - name: Create Artifact Path
-        run: |
-          mkdir -p sql-jdbc-builds
-          cp ./build/libs/*.jar sql-jdbc-builds
+      run: |
+        mkdir -p sql-jdbc-builds
+        cp ./build/libs/*.jar sql-jdbc-builds
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: sql-jdbc
-          path: sql-jdbc-builds
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: sql-jdbc
+        path: sql-jdbc-builds
