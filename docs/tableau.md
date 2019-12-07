@@ -52,7 +52,7 @@ You will need:
   Sample connection string for connecting to localhost: `jdbc:elasticsearch://localhost:9200`.
 
 * Credentials for signing in to the server (user name and password).
-* (Optional) JDBC properties file to customize the driver behaviour. For more details check [Customize JDBC Connections Using a Properties File](https://community.tableau.com/docs/DOC-17978)
+* (Optional) JDBC properties file to customize the driver behavior. For more details check [Customize JDBC Connections Using a Properties File](https://community.tableau.com/docs/DOC-17978)
   * Create a properties file called `elasticsearch.properties`.
   * Save the file to the `My Tableau Repository\Datasources` directory.
 
