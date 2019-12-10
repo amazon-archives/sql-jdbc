@@ -70,11 +70,11 @@ You will need:
 
 ### Prepare data
 
-* Select a single table by double clicking or dragging the required table to the canvas.
+* Select a single table by double-clicking or dragging the required table to the canvas.
 * To add data from two or more tables:
   1. Double click or drag tables to canvas.
-  2. Select desired type of join operation. Tableau supports inner join, right join, left join, full outer join. 
-  3. Select columns for join. (For meaningfful result, type of column should be same.)
+  2. Select the desired type of join operation. Tableau supports inner join, right join, left join and full outer join. 
+  3. Select columns for join. (For meaningful result, type of column should be the same.)
 
 ![Image of Tableau Database](img/tableau_database.PNG)
 
@@ -82,7 +82,7 @@ You will need:
 
 1. Select **Sheet 1** on the bottom left corner. 
 2. Double click or drag desired fields under **Measure**.
-3. Double click or drag desired fields under **Dimentions**.
+3. Double click or drag desired fields under **Dimensions**.
 4. Select available visualization under **Show Me**.
 
 ![Image of Tableau Graph](img/tableau_graph.PNG)
