@@ -1,4 +1,10 @@
-## 2019-10-29, Version 1.3.0 (Current)
+## 2019-12-11, Version 1.4.0 (Current)
+
+### Changes
+
+* Add documentation for connecting Tableau with Open Distro for Elasticsearch using JDBC Driver
+
+## 2019-10-29, Version 1.3.0
 
 ### Changes
 
