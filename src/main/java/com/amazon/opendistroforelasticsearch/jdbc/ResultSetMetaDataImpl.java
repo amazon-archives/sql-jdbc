@@ -130,7 +130,8 @@ public class ResultSetMetaDataImpl implements ResultSetMetaData, JdbcWrapper {
     @Override
     public String getColumnTypeName(int column) throws SQLException {
         checkAccessible(column);
-        return schema.getColumnMetaData(column-1).getEsTypeName();
+        //return schema.getColumnMetaData(column-1).getEsTypeName();
+        return schema.getElasticsearchType(column-1).getJdbcType().getName();
     }
 
     @Override
