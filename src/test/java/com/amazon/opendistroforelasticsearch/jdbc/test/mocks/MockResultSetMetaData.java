@@ -238,7 +238,7 @@ public class MockResultSetMetaData implements ResultSetMetaData, JdbcWrapper {
             setPrecision(esType.getPrecision());
             setColumnDisplaySize(esType.getDisplaySize());
             setColumnClassName(esType.getJavaClassName());
-            setColumnTypeName(esType.getTypeName());
+            setColumnTypeName(esType.getJdbcType().getName());
             setSigned(esType.isSigned());
             return this;
         }
