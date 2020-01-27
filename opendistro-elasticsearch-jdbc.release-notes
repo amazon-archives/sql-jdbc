@@ -1,9 +1,11 @@
-## 2019-12-11, Version 1.4.0 (Current)
+## 2019-1-26, Version 1.4.0 (Current)
 
 ### Changes
 
 * Add documentation for connecting Tableau with Open Distro for Elasticsearch using JDBC Driver
 * Added IP type and mapped with JDBC type of varchar
+* Adding missing Elasticsearch type 'object'
+* Result set metadata returns es type
 
 ## 2019-10-29, Version 1.3.0
 
