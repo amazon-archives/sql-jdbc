@@ -1,11 +1,15 @@
 ## 2019-1-26, Version 1.4.0 (Current)
 
-### Changes
+### Features
 
-* Add documentation for connecting Tableau with Open Distro for Elasticsearch using JDBC Driver
-* Added IP type and mapped with JDBC type of varchar
-* Adding missing Elasticsearch type 'object'
-* Result set metadata returns es type
+#### Documentation
+* Feature [#37](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/37): Tableau documentation
+* Feature [#35](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/35): Add documentation for connecting Tableau with OpenDistro for Elasticsearch using JDBC Driver
+
+### Bugfixes
+* BugFix [#47](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/47): Result set metadata returns Elasticsearch type (issue: [#43](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/43))
+* BugFix [#45](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/45): Add missing Elasticsearch type : object (issue: [#44](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/43))
+* BugFix [#32](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/32): Added IP type and mapped with JDBC type of varchar
 
 ## 2019-10-29, Version 1.3.0
 
