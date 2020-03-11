@@ -1,7 +1,4 @@
-## 2019-03-09, Version 1.5.0.0 (Current)
-* No update in this release.
-
-## 2019-1-26, Version 1.4.0
+## 2019-1-26, Version 1.4.0 (Current)
 
 ### Features
 
