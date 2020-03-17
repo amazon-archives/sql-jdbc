@@ -1,22 +1,7 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-## 2019-1-26, Version 1.4.0 (Current)
-=======
-## 2019-03-10, Version 1.6.0.0 (Current)
-* No update in this release.
-
-## 2019-1-26, Version 1.4.0
->>>>>>> OD Release 1.6.0.0
-=======
-## 2020-03-11, Version 1.6.0.0 (Current)
-=======
 ## 2020-03-17, Version 1.6.0.0 (Current)
->>>>>>> update release note
 * No update in this release.
 
 ## 2020-1-26, Version 1.4.0
->>>>>>> fixed typo in release notes
 
 ### Features
 
