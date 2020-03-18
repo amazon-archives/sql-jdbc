@@ -9,7 +9,7 @@ jobs:
   Release-SQL-JDBC:
     strategy:
       matrix:
-        java: [11]
+        java: [10]
 
     name: Build and Test SQL Plugin
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
       
       - name: Run build
         run: |
-          ./gradlew publishShadowPublicationToInternal-releasesRepository -Dbuild.snapshot=false
+          ./gradlew publishShadowPublicationToInternal-releasesRepository '-Dorg.gradle.jvmargs=--add-modules java.xml.bind' -Dbuild.snapshot=false
           artifact=`ls -1t build/libs/*.jar | grep -v "SNAPSHOT.jar" | grep -v "sources.jar" | head -1`
           echo $artifact
         
