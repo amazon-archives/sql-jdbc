@@ -9,7 +9,7 @@ jobs:
   Release-SQL-JDBC:
     strategy:
       matrix:
-        java: [13]
+        java: [11]
 
     name: Build and Test SQL Plugin
     runs-on: ubuntu-latest
