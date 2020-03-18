@@ -2,7 +2,6 @@ name: Build and Release SQL-JDBC
 on:
   push:
     branches:
-      - master
       - opendistro-*
 
 jobs:
@@ -17,6 +16,13 @@ jobs:
     steps:
       - name: Checkout SQL-JDBC
         uses: actions/checkout@v1
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
         
       - name: Setup Java ${{ matrix.java }}
         uses: actions/setup-java@v1
@@ -27,5 +33,5 @@ jobs:
         run: |
           ./gradlew publishShadowPublicationToInternal-releasesRepository '-Dorg.gradle.jvmargs=--add-modules java.xml.bind' -Dbuild.snapshot=false
           artifact=`ls -1t build/libs/*.jar | grep -v "SNAPSHOT.jar" | grep -v "sources.jar" | head -1`
-          echo $artifact
-        
+          aws s3 cp $artifact s3://artifacts.opendistroforelasticsearch.amazon.com/downloads/elasticsearch-clients/opendistro-sql-jdbc/
+          aws cloudfront create-invalidation --distribution-id E2S86LO5GZAJQM --paths "/downloads/*"
