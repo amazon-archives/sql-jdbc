@@ -1,0 +1,31 @@
+name: Build and Release SQL-JDBC
+on:
+  push:
+    branches:
+      - master
+      - opendistro-*
+
+jobs:
+  Release-SQL-JDBC:
+    strategy:
+      matrix:
+        java: [13]
+
+    name: Build and Test SQL Plugin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout SQL-JDBC
+        uses: actions/checkout@v1
+        
+      - name: Setup Java ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      
+      - name: Run build
+        run: |
+          ./gradlew publishShadowPublicationToInternal-releasesRepository '-Dorg.gradle.jvmargs=--add-modules java.xml.bind' -Dbuild.snapshot=false
+          artifact=`ls -1t build/libs/*.jar | grep -v "SNAPSHOT.jar" | grep -v "sources.jar" | head -1`
+          echo $artifact
+        
