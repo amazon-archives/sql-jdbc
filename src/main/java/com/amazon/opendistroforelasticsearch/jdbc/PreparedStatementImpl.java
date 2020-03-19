@@ -291,7 +291,11 @@ public class PreparedStatementImpl extends StatementImpl implements PreparedStat
 
     @Override
     public boolean execute() throws SQLException {
-        throw new SQLFeatureNotSupportedException("execute is not supported");
+        log.debug(() -> logEntry("execute()"));
+        checkOpen();
+        executeQueryX();
+        log.debug(() -> logExit("execute", true));
+        return true;
     }
 
     @Override
