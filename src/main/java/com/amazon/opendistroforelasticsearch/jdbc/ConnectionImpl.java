@@ -279,7 +279,7 @@ public class ConnectionImpl implements ElasticsearchConnection, JdbcWrapper, Log
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
         log.debug(() -> logEntry("prepareStatement (%s, %d, %d)", sql, resultSetType, resultSetConcurrency));
         checkOpen();
-        validateResultSetCharacteristics(resultSetType, resultSetConcurrency, resultSetConcurrency);
+        validateResultSetCharacteristics(resultSetType, resultSetConcurrency, ResultSet.HOLD_CURSORS_OVER_COMMIT);
         PreparedStatement pst = prepareStatementX(sql);
         log.debug(() -> logExit("prepareStatement", pst));
         return pst;
