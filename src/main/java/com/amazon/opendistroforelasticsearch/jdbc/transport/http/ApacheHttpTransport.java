@@ -42,6 +42,7 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -259,7 +260,7 @@ public class ApacheHttpTransport implements HttpTransport, LoggingSource {
             setReadTimeout(readTimeout);
             HttpPost request = new HttpPost(uri);
             request.setHeaders(headers);
-            request.setEntity(new StringEntity(body));
+            request.setEntity(new StringEntity(body, ContentType.APPLICATION_JSON));
             request.setConfig(getRequestConfig());
             return httpClient.execute(request);
         } catch (IOException e) {
