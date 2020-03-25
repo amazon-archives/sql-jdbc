@@ -1,5 +1,9 @@
-## 2020-03-17, Version 1.6.0.0 (Current)
-* No update in this release.
+## 2020-03-24, Version 1.6.0.0 (Current)
+### Enhancement
+* Enhancement [#49](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/49): Implementation of the execute method in the PreparedStatementImpl class (issue: [#62](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/62))
+
+### Bugfix
+* BugFix [#68](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/68): Change the request body encoding to UTF-8 (issues: [#54](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/54), [#66](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/66), [#opendistro for elasticsearch/sql#392](https://github.com/opendistro-for-elasticsearch/sql/issues/392) )
 
 ## 2020-1-26, Version 1.4.0
 
