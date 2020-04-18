@@ -2,7 +2,11 @@ package com.amazon.opendistroforelasticsearch.jdbc;
 
 import com.amazon.opendistroforelasticsearch.jdbc.config.ConnectionConfig;
 import com.amazon.opendistroforelasticsearch.jdbc.logging.NoOpLogger;
-import com.amazon.opendistroforelasticsearch.jdbc.protocol.*;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.ConnectionResponse;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.Protocol;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.ProtocolFactory;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryRequest;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryResponse;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.exceptions.ResponseException;
 import com.amazon.opendistroforelasticsearch.jdbc.test.PerTestWireMockServerExtension;
 import com.amazon.opendistroforelasticsearch.jdbc.transport.Transport;
@@ -14,13 +18,18 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLNonTransientException;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -41,7 +50,7 @@ public class PreparedStatementTests {
 
     private static Stream<Arguments> getArgumentsStream() {
         int[] resultSetTypes = new int[]{ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.TYPE_FORWARD_ONLY};
-        int[] resultSetConcurrencyTypes = new int[]{ResultSet.CONCUR_READ_ONLY, ResultSet.CONCUR_UPDATABLE, ResultSet.CONCUR_READ_ONLY};
+        int[] resultSetConcurrencyTypes = new int[]{ResultSet.CONCUR_READ_ONLY, ResultSet.CONCUR_UPDATABLE};
         int[] resultSetHoldabilityTypes = new int[]{ResultSet.HOLD_CURSORS_OVER_COMMIT, ResultSet.CLOSE_CURSORS_AT_COMMIT};
         Stream.Builder<Arguments> builder = Stream.builder();
         for (int resultSetType : resultSetTypes) {
