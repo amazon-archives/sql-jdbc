@@ -58,6 +58,7 @@ To setup a connection, the driver requires a JDBC connection URL. The connection
   | ------------- |-------------| -----|---------|
   | user      | Connection username. mandatory if `auth` property selects a authentication scheme that mandates a username value | any string   | `null` |
   | password      | Connection password. mandatory if `auth` property selects a authentication scheme that mandates a password value | any string     |   `null` |
+  | fetchSize      | Cursor page size | positive integer value. Max value is limited by `index.max_result_window` Elasticsearch setting  |   `0` (for non-paginated response) |
   | logOutput | location where driver logs should be emitted | a valid file path     |    `null` (logs are disabled) |
   | logLevel | severity level for which driver logs should be emitted | in order from highest(least logging) to lowest(most logging): OFF, FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL  |    OFF (logs are disabled) |
   | auth     | authentication mechanism to use | `NONE` (no auth), `BASIC` (HTTP Basic), `AWS_SIGV4` (AWS SIGV4) | `basic` if username and/or password is specified, `NONE` otherwise |
