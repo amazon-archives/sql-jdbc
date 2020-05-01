@@ -96,6 +96,24 @@ class ConnectionConfigTests {
     }
 
     @Test
+    void testFetchSizeConfig() {
+        // exception with invalid values
+        assertPropertyRejects(FetchSizeProperty.KEY,
+                "invalidValue",
+                -1,
+                "-1",
+                "3.14");
+
+        // valid values
+        assertPropertyAccepts(FetchSizeProperty.KEY, ConnectionConfig::getFetchSize,
+                500,
+                0);
+
+        assertPropertyAcceptsParsedValue(
+                FetchSizeProperty.KEY, ConnectionConfig::getFetchSize, "25", 25);
+    }
+
+    @Test
     void testPathConfig() {
         // exception with invalid values
         assertPropertyRejects(PathConnectionProperty.KEY, 42, -1, true, false);
@@ -873,6 +891,7 @@ class ConnectionConfigTests {
         // verify defaults
         assertEquals(9200, connectionConfig.getPort());
         assertEquals("", connectionConfig.getPath());
+        assertEquals(0, connectionConfig.getFetchSize());
         assertEquals("localhost", connectionConfig.getHost());
         assertEquals(0, connectionConfig.getLoginTimeout());
         assertFalse(connectionConfig.isUseSSL());
