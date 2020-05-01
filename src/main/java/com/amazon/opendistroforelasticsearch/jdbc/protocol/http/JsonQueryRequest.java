@@ -18,20 +18,23 @@ package com.amazon.opendistroforelasticsearch.jdbc.protocol.http;
 
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.Parameter;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryRequest;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
 public class JsonQueryRequest implements QueryRequest {
 
     private String query;
+    private int fetchSize;
     private List<? extends Parameter> parameters;
 
     public JsonQueryRequest(QueryRequest queryRequest) {
         this.query = queryRequest.getQuery();
         this.parameters = queryRequest.getParameters();
+        this.fetchSize = queryRequest.getFetchSize();
+
     }
 
     @Override
@@ -45,9 +48,9 @@ public class JsonQueryRequest implements QueryRequest {
         return parameters;
     }
 
-    @JsonIgnore
+    @JsonProperty("fetch_size")
     @Override
     public int getFetchSize() {
-        return 0;
+        return fetchSize;
     }
 }

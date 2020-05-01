@@ -24,6 +24,7 @@ import com.amazon.opendistroforelasticsearch.jdbc.internal.JdbcWrapper;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.exceptions.InternalServerErrorException;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryResponse;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.exceptions.ResponseException;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.http.JsonQueryResponse;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -38,6 +39,7 @@ public class StatementImpl implements Statement, JdbcWrapper, LoggingSource {
 
     protected ConnectionImpl connection;
     protected boolean open = false;
+    protected int fetchSize;
     protected ResultSetImpl resultSet;
     protected Logger log;
     private boolean closeOnCompletion;
@@ -45,19 +47,25 @@ public class StatementImpl implements Statement, JdbcWrapper, LoggingSource {
     public StatementImpl(ConnectionImpl connection, Logger log) {
         this.connection = connection;
         this.open = true;
+        this.fetchSize = connection.getFetchSize();
         this.log = log;
     }
 
     @Override
     public ResultSet executeQuery(String sql) throws SQLException {
         log.debug(()-> logEntry("executeQuery (%s)", sql));
-        ResultSet rs = executeQueryX(sql);
+        ResultSet rs = executeQueryXWithFetchSize(sql, fetchSize);
         log.debug(()-> logExit("executeQuery", rs));
         return rs;
     }
 
     protected ResultSet executeQueryX(String sql) throws SQLException {
         JdbcQueryRequest jdbcQueryRequest = new JdbcQueryRequest(sql);
+        return executeQueryRequest(jdbcQueryRequest);
+    }
+
+    protected ResultSet executeQueryXWithFetchSize(String sql, int fetchSize) throws SQLException {
+        JdbcQueryRequest jdbcQueryRequest = new JdbcQueryRequest(sql, fetchSize);
         return executeQueryRequest(jdbcQueryRequest);
     }
 
@@ -205,12 +213,12 @@ public class StatementImpl implements Statement, JdbcWrapper, LoggingSource {
 
     @Override
     public void setFetchSize(int rows) throws SQLException {
-
+        fetchSize = rows;
     }
 
     @Override
     public int getFetchSize() throws SQLException {
-        return 0;
+        return fetchSize;
     }
 
     @Override

@@ -75,10 +75,18 @@ public class PreparedStatementImpl extends StatementImpl implements PreparedStat
     public ResultSet executeQuery() throws SQLException {
         log.debug(() -> logEntry("executeQuery()"));
         checkOpen();
-        ResultSet rs = executeQueryX();
+        ResultSet rs = executeQueryXWithFetchSize(getFetchSize());
         log.debug(() -> logExit("executeQuery", rs));
         return rs;
     }
+
+    protected ResultSet executeQueryXWithFetchSize(int fetchSize) throws SQLException {
+        checkParamsFilled();
+        JdbcQueryRequest jdbcQueryRequest = new JdbcQueryRequest(sql, fetchSize);
+        jdbcQueryRequest.setParameters(Arrays.asList(parameters));
+        return executeQueryRequest(jdbcQueryRequest);
+    }
+
 
     protected ResultSet executeQueryX() throws SQLException {
         checkParamsFilled();

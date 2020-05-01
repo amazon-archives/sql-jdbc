@@ -22,12 +22,18 @@ import java.util.Objects;
 public class JdbcQueryRequest implements QueryRequest {
 
     String statement;
-
+    int fetchSize;
     List<JdbcQueryParam> parameters;
 
     public JdbcQueryRequest(String sql) {
         this.statement = sql;
     }
+
+    public JdbcQueryRequest(String sql, int fetchSize) {
+        this.statement = sql;
+        this.fetchSize = fetchSize;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -59,13 +65,14 @@ public class JdbcQueryRequest implements QueryRequest {
 
     @Override
     public int getFetchSize() {
-        return 0;
+        return fetchSize;
     }
 
     @Override
     public String toString() {
         return "JdbcQueryRequest{" +
                 "statement='" + statement + '\'' +
+                ", fetchSize='" + fetchSize + '\'' +
                 ", parameters=" + parameters +
                 '}';
     }
