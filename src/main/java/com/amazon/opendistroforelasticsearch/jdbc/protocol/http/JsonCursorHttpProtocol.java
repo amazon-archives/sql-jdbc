@@ -33,12 +33,8 @@ public class JsonCursorHttpProtocol extends JsonHttpProtocol {
     }
 
     private String buildQueryRequestBody(QueryRequest queryRequest) throws IOException {
-        String requestBody = null;
-
         JsonCursorQueryRequest jsonQueryRequest = new JsonCursorQueryRequest(queryRequest);
-        requestBody = mapper.writeValueAsString(jsonQueryRequest);
-        System.out.println("Cursor request body:" + requestBody);
-
+        String requestBody = mapper.writeValueAsString(jsonQueryRequest);
         return requestBody;
     }
 

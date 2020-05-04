@@ -21,8 +21,8 @@ import java.util.Objects;
 
 public class JdbcQueryRequest implements QueryRequest {
 
-    String statement;
-    int fetchSize;
+    private String statement;
+    private int fetchSize;
     List<JdbcQueryParam> parameters;
 
     public JdbcQueryRequest(String sql) {

@@ -125,8 +125,9 @@ public class ResultSetImpl implements ResultSet, JdbcWrapper, LoggingSource {
         boolean next = cursor.next();
 
         if (!next && this.cursorId != null) {
-            // TODO: add debug logs around here
+            log.debug(() -> logEntry("buildNextPageFromCursorId()"));
             buildNextPageFromCursorId();
+            log.debug(() -> logExit("buildNextPageFromCursorId()"));
             next = cursor.next();
         }
 

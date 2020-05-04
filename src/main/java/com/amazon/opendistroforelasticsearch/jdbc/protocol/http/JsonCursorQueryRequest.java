@@ -10,7 +10,7 @@ import java.util.List;
 
 public class JsonCursorQueryRequest implements QueryRequest  {
 
-    private String cursor;
+    private final String cursor;
     private List<? extends Parameter> parameters;
 
     public JsonCursorQueryRequest(QueryRequest queryRequest) {
