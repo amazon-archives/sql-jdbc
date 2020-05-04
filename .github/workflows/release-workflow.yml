@@ -1,8 +1,9 @@
 name: Build and Release SQL-JDBC
+# This workflow is triggered on creating tags to master or an opendistro release branch
 on:
   push:
-    branches:
-      - opendistro-*
+    tags:
+      - 'v*'
 
 jobs:
   Release-SQL-JDBC:
