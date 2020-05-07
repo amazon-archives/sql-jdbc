@@ -21,12 +21,6 @@ import com.amazon.opendistroforelasticsearch.jdbc.protocol.ProtocolFactory;
 import com.amazon.opendistroforelasticsearch.jdbc.transport.http.HttpTransport;
 
 
-/**
- * Factory to create JsonHttpProtocol objects
- *
- *  @author abbas hussain
- *  @since 07.05.20
- */
 public class JsonHttpProtocolFactory implements ProtocolFactory<JsonHttpProtocol, HttpTransport> {
 
     public static JsonHttpProtocolFactory INSTANCE = new JsonHttpProtocolFactory();
