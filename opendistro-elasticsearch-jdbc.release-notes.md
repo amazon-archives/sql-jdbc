@@ -1,4 +1,8 @@
-## 2020-03-24, Version 1.6.0.0 (Current)
+## 2020-04-29, Version 1.6.1.0 (Current)
+### Enhancement
+* Enhancement [#72](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/72): Use default holdability for prepareStatement. (issue: [#63](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/63))
+
+## 2020-03-24, Version 1.6.0.0
 ### Enhancement
 * Enhancement [#49](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/49): Implementation of the execute method in the PreparedStatementImpl class (issue: [#62](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/62))
 
