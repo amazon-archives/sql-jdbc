@@ -9,6 +9,12 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Http protocol for cursor request and response
+ *
+ *  @author abbas hussain
+ *  @since 07.05.20
+ **/
 public class JsonCursorHttpProtocol extends JsonHttpProtocol {
 
     public JsonCursorHttpProtocol(HttpTransport transport) {

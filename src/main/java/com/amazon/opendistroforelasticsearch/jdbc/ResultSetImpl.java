@@ -141,7 +141,14 @@ public class ResultSetImpl implements ResultSet, JdbcWrapper, LoggingSource {
         return next;
     }
 
-
+    /**
+     * TODO: Refactor as suggested https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/76#discussion_r421571383
+     *
+     * This method has side effects. It creates a new Cursor to hold rows from new pages.
+     * Ideally fetching next set of rows using cursorId should be delegated to Cursor.
+     * In addition, the cursor should be final.
+     *
+     **/
     protected void buildNextPageFromCursorId() throws SQLException {
         try {
             JdbcCursorQueryRequest jdbcCursorQueryRequest = new JdbcCursorQueryRequest(this.cursorId);

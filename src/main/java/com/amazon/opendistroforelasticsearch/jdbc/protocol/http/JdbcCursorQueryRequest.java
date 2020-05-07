@@ -7,6 +7,12 @@ import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryRequest;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Bean to encapsulate cursor ID
+ *
+ *  @author abbas hussain
+ *  @since 07.05.20
+ **/
 public class JdbcCursorQueryRequest implements QueryRequest {
 
     String cursor;

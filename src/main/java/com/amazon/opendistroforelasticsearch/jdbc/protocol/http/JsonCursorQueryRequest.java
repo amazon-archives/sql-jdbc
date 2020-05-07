@@ -7,6 +7,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+/**
+ * Definition of json cursor request
+ *
+ *  @author abbas hussain
+ *  @since 07.05.20
+ **/
 public class JsonCursorQueryRequest implements QueryRequest  {
 
     private final String cursor;
