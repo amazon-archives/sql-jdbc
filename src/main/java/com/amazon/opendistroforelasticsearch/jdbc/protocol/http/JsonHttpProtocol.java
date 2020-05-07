@@ -100,10 +100,8 @@ public class JsonHttpProtocol implements Protocol {
     }
 
     private String buildQueryRequestBody(QueryRequest queryRequest) throws IOException {
-        String requestBody = null;
-
         JsonQueryRequest jsonQueryRequest = new JsonQueryRequest(queryRequest);
-        requestBody = mapper.writeValueAsString(jsonQueryRequest);
+        String requestBody = mapper.writeValueAsString(jsonQueryRequest);
         return requestBody;
     }
 

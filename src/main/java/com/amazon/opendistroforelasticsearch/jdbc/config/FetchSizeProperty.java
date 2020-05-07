@@ -7,8 +7,4 @@ public class FetchSizeProperty extends IntConnectionProperty {
     public FetchSizeProperty() {
         super(KEY);
     }
-
-    public Integer getDefault() {
-        return 0;
-    }
 }

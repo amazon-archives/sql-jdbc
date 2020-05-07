@@ -10,7 +10,6 @@ import java.util.Objects;
 public class JdbcCursorQueryRequest implements QueryRequest {
 
     String cursor;
-    List<JdbcQueryParam> parameters;
 
     public JdbcCursorQueryRequest(String cursor) {
         this.cursor = cursor;
@@ -37,11 +36,7 @@ public class JdbcCursorQueryRequest implements QueryRequest {
 
     @Override
     public List<JdbcQueryParam> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(List<JdbcQueryParam> parameters) {
-        this.parameters = parameters;
+        return null;
     }
 
     @Override
@@ -53,7 +48,6 @@ public class JdbcCursorQueryRequest implements QueryRequest {
     public String toString() {
         return "JdbcQueryRequest{" +
                 "cursor='" + cursor + '\'' +
-                ", parameters=" + parameters +
                 '}';
     }
 }
