@@ -32,7 +32,7 @@ plugins {
 group 'com.amazon.opendistroforelasticsearch.client'
 
 // keep version in sync with version in Driver source
-version '1.6.1.0'
+version '1.7.0.0'
 
 version = "${version}"
 
