@@ -30,5 +30,7 @@ public interface QueryResponse {
 
     int getStatus();
 
+    String getCursor();
+
     RequestError getError();
 }

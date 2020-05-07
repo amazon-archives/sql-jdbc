@@ -25,9 +25,11 @@ import java.sql.SQLException;
 import java.sql.SQLNonTransientException;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -137,6 +139,55 @@ public class PreparedStatementTests {
                 .thenReturn(mock(QueryResponse.class));
         Connection con = new ConnectionImpl(ConnectionConfig.builder().build(), tf, pf, NoOpLogger.INSTANCE);
         return con;
+    }
+
+    @Test
+    void testEffectiveFetchSizeOnPreparedStatement() throws ResponseException, IOException, SQLException {
+
+        TransportFactory tf = mock(TransportFactory.class);
+        ProtocolFactory pf = mock(ProtocolFactory.class);
+        Protocol mockProtocol = mock(Protocol.class);
+
+        when(mockProtocol.connect(anyInt())).thenReturn(mock(ConnectionResponse.class));
+
+        when(tf.getTransport(any(), any(), any()))
+                .thenReturn(mock(Transport.class));
+
+        when(pf.getProtocol(any(ConnectionConfig.class), any(Transport.class)))
+                .thenReturn(mockProtocol);
+
+        when(mockProtocol.execute(any(QueryRequest.class)))
+                .thenReturn(mock(QueryResponse.class));
+
+        String url = "jdbc:elasticsearch://localhost:9200?fetchSize=400";
+
+        ConnectionConfig connectionConfig = ConnectionConfig.builder().setUrl(url).build();
+        Connection con = new ConnectionImpl(connectionConfig, tf, pf, NoOpLogger.INSTANCE);
+        PreparedStatement st = con.prepareStatement(sql);
+        assertEquals(st.getFetchSize(), 400);
+        st.close();
+        con.close();
+
+        // Properties override connection string fetchSize
+        Properties properties = new Properties();
+        properties.setProperty("fetchSize", "5000");
+        connectionConfig = ConnectionConfig.builder().setUrl(url).setProperties(properties).build();
+        con = new ConnectionImpl(connectionConfig, tf, pf, NoOpLogger.INSTANCE);
+        st = con.prepareStatement(sql);
+        assertEquals(st.getFetchSize(), 5000);
+        st.close();
+        con.close();
+
+
+        // setFetchSize overrides fetchSize set anywhere
+        connectionConfig = ConnectionConfig.builder().setUrl(url).setProperties(properties).build();
+        con = new ConnectionImpl(connectionConfig, tf, pf, NoOpLogger.INSTANCE);
+        st = con.prepareStatement(sql);
+        st.setFetchSize(200);
+        assertEquals(st.getFetchSize(), 200);
+        st.close();
+        con.close();
+
     }
 
 }

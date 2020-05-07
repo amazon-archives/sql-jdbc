@@ -26,10 +26,17 @@ import com.amazon.opendistroforelasticsearch.jdbc.logging.Logger;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.ColumnDescriptor;
 import com.amazon.opendistroforelasticsearch.jdbc.internal.JdbcWrapper;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryResponse;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.exceptions.InternalServerErrorException;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.exceptions.ResponseException;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.http.JdbcCursorQueryRequest;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.http.JsonCursorHttpProtocol;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.http.JsonCursorHttpProtocolFactory;
+import com.amazon.opendistroforelasticsearch.jdbc.transport.http.HttpTransport;
 import com.amazon.opendistroforelasticsearch.jdbc.types.TypeConverter;
 import com.amazon.opendistroforelasticsearch.jdbc.types.TypeConverters;
 import com.amazon.opendistroforelasticsearch.jdbc.types.UnrecognizedElasticsearchTypeException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -71,6 +78,7 @@ public class ResultSetImpl implements ResultSet, JdbcWrapper, LoggingSource {
 
     private StatementImpl statement;
     protected Cursor cursor;
+    private String cursorId;
     private boolean open = false;
     private boolean wasNull = false;
     private boolean afterLast = false;
@@ -78,11 +86,16 @@ public class ResultSetImpl implements ResultSet, JdbcWrapper, LoggingSource {
     private Logger log;
 
     public ResultSetImpl(StatementImpl statement, QueryResponse queryResponse, Logger log) throws SQLException {
-        this(statement, queryResponse.getColumnDescriptors(), queryResponse.getDatarows(), log);
+        this(statement, queryResponse.getColumnDescriptors(), queryResponse.getDatarows(), queryResponse.getCursor(), log);
     }
 
     public ResultSetImpl(StatementImpl statement, List<? extends ColumnDescriptor> columnDescriptors,
                          List<List<Object>> dataRows, Logger log) throws SQLException {
+        this(statement, columnDescriptors, dataRows, null, log);
+    }
+
+    public ResultSetImpl(StatementImpl statement, List<? extends ColumnDescriptor> columnDescriptors,
+                         List<List<Object>> dataRows, String cursorId, Logger log) throws SQLException {
         this.statement = statement;
         this.log = log;
 
@@ -93,12 +106,10 @@ public class ResultSetImpl implements ResultSet, JdbcWrapper, LoggingSource {
                     .map(ColumnMetaData::new)
                     .collect(Collectors.toList()));
 
-            List<Row> rows = dataRows
-                    .parallelStream()
-                    .map(Row::new)
-                    .collect(Collectors.toList());
+            List<Row> rows = getRowsFromDataRows(dataRows);
 
             this.cursor = new Cursor(schema, rows);
+            this.cursorId = cursorId;
             this.open = true;
 
         } catch (UnrecognizedElasticsearchTypeException ex) {
@@ -112,13 +123,61 @@ public class ResultSetImpl implements ResultSet, JdbcWrapper, LoggingSource {
         log.debug(() -> logEntry("next()"));
         checkOpen();
         boolean next = cursor.next();
+
+        if (!next && this.cursorId != null) {
+            log.debug(() -> logEntry("buildNextPageFromCursorId()"));
+            buildNextPageFromCursorId();
+            log.debug(() -> logExit("buildNextPageFromCursorId()"));
+            next = cursor.next();
+        }
+
         if (next) {
             beforeFirst = false;
         } else {
             afterLast = true;
         }
-        log.debug(() -> logExit("next", next));
+        boolean finalNext = next;
+        log.debug(() -> logExit("next", finalNext));
         return next;
+    }
+
+    /**
+     * TODO: Refactor as suggested https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/76#discussion_r421571383
+     *
+     * This method has side effects. It creates a new Cursor to hold rows from new pages.
+     * Ideally fetching next set of rows using cursorId should be delegated to Cursor.
+     * In addition, the cursor should be final.
+     *
+     **/
+    protected void buildNextPageFromCursorId() throws SQLException {
+        try {
+            JdbcCursorQueryRequest jdbcCursorQueryRequest = new JdbcCursorQueryRequest(this.cursorId);
+            JsonCursorHttpProtocolFactory protocolFactory = JsonCursorHttpProtocolFactory.INSTANCE;
+            ConnectionImpl connection = (ConnectionImpl) statement.getConnection();
+
+            JsonCursorHttpProtocol protocol = protocolFactory.getProtocol(null, (HttpTransport) connection.getTransport());
+            QueryResponse queryResponse = protocol.execute(jdbcCursorQueryRequest);
+
+            if (queryResponse.getError() != null) {
+                throw new InternalServerErrorException(
+                        queryResponse.getError().getReason(),
+                        queryResponse.getError().getType(),
+                        queryResponse.getError().getDetails());
+            }
+
+            cursor = new Cursor(cursor.getSchema(), getRowsFromDataRows(queryResponse.getDatarows()));
+            cursorId = queryResponse.getCursor();
+
+        } catch (ResponseException | IOException ex) {
+            logAndThrowSQLException(log, new SQLException("Error executing cursor query", ex));
+        }
+    }
+
+    private List<Row> getRowsFromDataRows(List<List<Object>> dataRows) {
+        return dataRows
+                .parallelStream()
+                .map(Row::new)
+                .collect(Collectors.toList());
     }
 
     @Override

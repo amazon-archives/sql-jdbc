@@ -184,3 +184,25 @@ signing {
     sign publishing.publications.shadow
 }
 
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled true
+    }
+}
+test.finalizedBy(project.tasks.jacocoTestReport)
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.4
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification

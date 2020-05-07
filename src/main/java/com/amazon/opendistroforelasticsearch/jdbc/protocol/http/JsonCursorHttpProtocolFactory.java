@@ -20,17 +20,22 @@ import com.amazon.opendistroforelasticsearch.jdbc.config.ConnectionConfig;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.ProtocolFactory;
 import com.amazon.opendistroforelasticsearch.jdbc.transport.http.HttpTransport;
 
+/**
+ * Factory to create JsonCursorHttpProtocol objects
+ *
+ *  @author abbas hussain
+ *  @since 07.05.20
+ */
+public class JsonCursorHttpProtocolFactory implements ProtocolFactory<JsonCursorHttpProtocol, HttpTransport> {
 
-public class JsonHttpProtocolFactory implements ProtocolFactory<JsonHttpProtocol, HttpTransport> {
+    public static JsonCursorHttpProtocolFactory INSTANCE = new JsonCursorHttpProtocolFactory();
 
-    public static JsonHttpProtocolFactory INSTANCE = new JsonHttpProtocolFactory();
-
-    private JsonHttpProtocolFactory() {
+    private JsonCursorHttpProtocolFactory() {
 
     }
 
     @Override
-    public JsonHttpProtocol getProtocol(ConnectionConfig connectionConfig, HttpTransport transport) {
-        return new JsonHttpProtocol(transport);
+    public JsonCursorHttpProtocol getProtocol(ConnectionConfig connectionConfig, HttpTransport transport) {
+        return new JsonCursorHttpProtocol(transport);
     }
 }

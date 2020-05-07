@@ -18,39 +18,40 @@ package com.amazon.opendistroforelasticsearch.jdbc.protocol.http;
 
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.Parameter;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryRequest;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class JsonQueryRequest implements QueryRequest {
+/**
+ * Definition of json cursor request
+ *
+ *  @author abbas hussain
+ *  @since 07.05.20
+ **/
+public class JsonCursorQueryRequest implements QueryRequest  {
 
-    private String query;
-    private int fetchSize;
-    private List<? extends Parameter> parameters;
+    private final String cursor;
 
-    public JsonQueryRequest(QueryRequest queryRequest) {
-        this.query = queryRequest.getQuery();
-        this.parameters = queryRequest.getParameters();
-        this.fetchSize = queryRequest.getFetchSize();
-
+    public JsonCursorQueryRequest(QueryRequest queryRequest) {
+        this.cursor = queryRequest.getQuery();
     }
 
+    @JsonProperty("cursor")
     @Override
     public String getQuery() {
-        return query;
+        return cursor;
     }
 
-    @JsonInclude(Include.NON_NULL)
+    @JsonIgnore
     @Override
     public List<? extends Parameter> getParameters() {
-        return parameters;
+        return null;
     }
 
-    @JsonProperty("fetch_size")
+    @JsonIgnore
     @Override
     public int getFetchSize() {
-        return fetchSize;
+        return 0;
     }
 }

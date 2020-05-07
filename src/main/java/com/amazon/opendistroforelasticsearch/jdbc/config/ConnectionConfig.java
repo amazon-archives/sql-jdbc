@@ -34,6 +34,7 @@ public class ConnectionConfig {
     private String url;
     private String host;
     private int port;
+    private int fetchSize;
     private String path;
     private boolean useSSL;
     private int loginTimeout;
@@ -60,6 +61,7 @@ public class ConnectionConfig {
         this.url = builder.getUrl();
         this.host = builder.getHostProperty().getValue();
         this.port = builder.getPortProperty().getValue();
+        this.fetchSize = builder.getFetchSizeProperty().getValue();
         this.path = builder.getPathProperty().getValue();
         this.useSSL = builder.getUseSSLProperty().getValue();
 
@@ -104,6 +106,10 @@ public class ConnectionConfig {
 
     public int getPort() {
         return port;
+    }
+
+    public int getFetchSize() {
+        return fetchSize;
     }
 
     public String getPath() {
@@ -192,6 +198,7 @@ public class ConnectionConfig {
                 "url='" + url + '\'' +
                 ", host='" + host + '\'' +
                 ", port=" + port +
+                ", fetchSize=" + fetchSize +
                 ", path='" + path + '\'' +
                 ", useSSL=" + useSSL +
                 ", loginTimeout=" + loginTimeout +
@@ -223,6 +230,7 @@ public class ConnectionConfig {
 
         private HostConnectionProperty hostProperty = new HostConnectionProperty();
         private PortConnectionProperty portProperty = new PortConnectionProperty();
+        private FetchSizeProperty fetchSizeProperty = new FetchSizeProperty();
         private LoginTimeoutConnectionProperty loginTimeoutProperty = new LoginTimeoutConnectionProperty();
         private UseSSLConnectionProperty useSSLProperty = new UseSSLConnectionProperty();
         private PathConnectionProperty pathProperty = new PathConnectionProperty();
@@ -261,6 +269,7 @@ public class ConnectionConfig {
         ConnectionProperty[] connectionProperties = new ConnectionProperty[]{
                 hostProperty,
                 portProperty,
+                fetchSizeProperty,
                 loginTimeoutProperty,
                 useSSLProperty,
                 pathProperty,
@@ -300,6 +309,10 @@ public class ConnectionConfig {
 
         public PortConnectionProperty getPortProperty() {
             return portProperty;
+        }
+
+        public FetchSizeProperty getFetchSizeProperty() {
+            return fetchSizeProperty;
         }
 
         public LoginTimeoutConnectionProperty getLoginTimeoutProperty() {
@@ -518,6 +531,11 @@ public class ConnectionConfig {
                 // port is not explicitly specified, but SSL is enabled
                 // change the default port to use to 443
                 portProperty.setRawValue(443);
+            }
+
+            if (fetchSizeProperty.getValue() < 0) {
+                throw new ConnectionPropertyException(fetchSizeProperty.getKey(),
+                        "Cursor fetch size value should be greater or equal to zero");
             }
         }
 

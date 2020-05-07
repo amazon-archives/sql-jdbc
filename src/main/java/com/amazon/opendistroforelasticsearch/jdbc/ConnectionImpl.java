@@ -60,6 +60,7 @@ public class ConnectionImpl implements ElasticsearchConnection, JdbcWrapper, Log
     private String url;
     private String user;
     private Logger log;
+    private int fetchSize;
     private boolean open = false;
     private Transport transport;
     private Protocol protocol;
@@ -74,6 +75,7 @@ public class ConnectionImpl implements ElasticsearchConnection, JdbcWrapper, Log
         this.log = log;
         this.url = connectionConfig.getUrl();
         this.user = connectionConfig.getUser();
+        this.fetchSize = connectionConfig.getFetchSize();
 
         try {
             this.transport = transportFactory.getTransport(connectionConfig, log, getUserAgent());
@@ -99,6 +101,10 @@ public class ConnectionImpl implements ElasticsearchConnection, JdbcWrapper, Log
 
     public String getUser() {
         return user;
+    }
+
+    public int getFetchSize() {
+        return fetchSize;
     }
 
     @Override

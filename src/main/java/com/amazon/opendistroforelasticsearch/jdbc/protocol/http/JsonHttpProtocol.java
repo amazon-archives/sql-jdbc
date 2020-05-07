@@ -32,6 +32,7 @@ import org.apache.http.message.BasicHeader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 public class JsonHttpProtocol implements Protocol {
 
@@ -42,11 +43,11 @@ public class JsonHttpProtocol implements Protocol {
     private static final Header acceptJson = new BasicHeader(HttpHeaders.ACCEPT, "application/json");
     private static final Header contentTypeJson = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
     private static final HttpParam requestJdbcFormatParam = new HttpParam("format", "jdbc");
-    private static final Header[] defaultJsonHeaders = new Header[]{acceptJson, contentTypeJson};
+    protected static final Header[] defaultJsonHeaders = new Header[]{acceptJson, contentTypeJson};
     private static final Header[] defaultEmptyRequestBodyJsonHeaders = new Header[]{acceptJson};
-    private static final HttpParam[] defaultJdbcParams = new HttpParam[]{requestJdbcFormatParam};
+    protected static final HttpParam[] defaultJdbcParams = new HttpParam[]{requestJdbcFormatParam};
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    protected static final ObjectMapper mapper = new ObjectMapper();
     private String sqlContextPath;
     private HttpTransport transport;
     private JsonHttpResponseHandler jsonHttpResponseHandler;
@@ -63,6 +64,14 @@ public class JsonHttpProtocol implements Protocol {
 
     public String getSqlContextPath() {
         return sqlContextPath;
+    }
+
+    public HttpTransport getTransport() {
+        return this.transport;
+    }
+
+    public JsonHttpResponseHandler getJsonHttpResponseHandler() {
+        return this.jsonHttpResponseHandler;
     }
 
     @Override
@@ -91,11 +100,8 @@ public class JsonHttpProtocol implements Protocol {
     }
 
     private String buildQueryRequestBody(QueryRequest queryRequest) throws IOException {
-        String requestBody = null;
-
         JsonQueryRequest jsonQueryRequest = new JsonQueryRequest(queryRequest);
-        requestBody = mapper.writeValueAsString(jsonQueryRequest);
-
+        String requestBody = mapper.writeValueAsString(jsonQueryRequest);
         return requestBody;
     }
 

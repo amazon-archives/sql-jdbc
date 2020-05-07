@@ -19,6 +19,9 @@ package com.amazon.opendistroforelasticsearch.jdbc;
 import com.amazon.opendistroforelasticsearch.jdbc.internal.exceptions.ObjectClosedException;
 import com.amazon.opendistroforelasticsearch.jdbc.logging.NoOpLogger;
 import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryResponse;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.http.JsonHttpProtocol;
+import com.amazon.opendistroforelasticsearch.jdbc.test.TestResources;
+import com.amazon.opendistroforelasticsearch.jdbc.test.mocks.MockES;
 import com.amazon.opendistroforelasticsearch.jdbc.types.ElasticsearchType;
 import com.amazon.opendistroforelasticsearch.jdbc.test.PerTestWireMockServerExtension;
 import com.amazon.opendistroforelasticsearch.jdbc.test.WireMockServerHelpers;
@@ -41,6 +44,12 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.stream.Stream;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -91,6 +100,81 @@ public class ResultSetTests implements WireMockServerHelpers {
                 Arguments.of(new QueryMock.NycTaxisQueryWithAliasMock())
         );
     }
+
+
+
+    @Test
+    void testResultSetOnPaginatedResponse(WireMockServer mockServer) throws SQLException, IOException {
+
+        String queryUrl = JsonHttpProtocol.DEFAULT_SQL_CONTEXT_PATH+"?format=jdbc";
+        final String sql = "SELECT firstname, age FROM accounts LIMIT 12";
+
+        // get Connection stub
+        setupStubForConnect(mockServer, "/");
+
+        // query response stub for initial page
+        mockServer.stubFor(post(urlEqualTo(queryUrl))
+                .withHeader("Accept", equalTo("application/json"))
+                .withHeader("Content-Type", equalTo("application/json"))
+                .withRequestBody(matchingJsonPath("$.query", equalTo(sql)))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(getResponseBodyFromPath("mock/protocol/json/cursor/queryresponse_accounts_00.json"))));
+
+        // query response stub for second page
+        mockServer.stubFor(post(urlEqualTo(queryUrl))
+                .withHeader("Accept", equalTo("application/json"))
+                .withHeader("Content-Type", equalTo("application/json"))
+                .withRequestBody(matchingJsonPath("$.cursor", equalTo("abcde_1")))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(getResponseBodyFromPath("mock/protocol/json/cursor/queryresponse_accounts_01.json"))));
+
+        // query response stub for third page
+        mockServer.stubFor(post(urlEqualTo(queryUrl))
+                .withHeader("Accept", equalTo("application/json"))
+                .withHeader("Content-Type", equalTo("application/json"))
+                .withRequestBody(matchingJsonPath("$.cursor", equalTo("abcde_2")))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(getResponseBodyFromPath("mock/protocol/json/cursor/queryresponse_accounts_02.json"))));
+
+        // query response stub for last page
+        mockServer.stubFor(post(urlEqualTo(queryUrl))
+                .withHeader("Accept", equalTo("application/json"))
+                .withHeader("Content-Type", equalTo("application/json"))
+                .withRequestBody(matchingJsonPath("$.cursor", equalTo("abcde_3")))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(getResponseBodyFromPath("mock/protocol/json/cursor/queryresponse_accounts_03.json"))));
+
+
+        Connection con = new Driver().connect(getBaseURLForMockServer(mockServer), null);
+        Statement st = con.createStatement();
+        st.setFetchSize(3);
+        ResultSet rs = assertDoesNotThrow(() -> st.executeQuery(sql));
+        int cursorRowCount = 0;
+
+        while(rs.next()) {
+            cursorRowCount++;
+        }
+        assertEquals(12, cursorRowCount, "Unexpected number of rows retrieved from cursor.");
+
+        // test for execute method, mostly used by BI tools like Tableau for example.
+        con = new Driver().connect(getBaseURLForMockServer(mockServer), null);
+        Statement statement = con.createStatement();
+        st.setFetchSize(3);
+        boolean executed = assertDoesNotThrow(() -> statement.execute(sql));
+        assertTrue(executed);
+        rs = statement.getResultSet();
+        cursorRowCount = 0;
+
+        while(rs.next()) {
+            cursorRowCount++;
+        }
+        assertEquals(12, cursorRowCount, "Unexpected number of rows retrieved from cursor.");
+    }
+
 
     @Test
     void testNullableFieldsQuery(WireMockServer mockServer) throws SQLException, IOException {
@@ -177,4 +261,19 @@ public class ResultSetTests implements WireMockServerHelpers {
         SQLException ex = assertThrows(SQLException.class, () -> rsImpl.unwrap(mock(ResultSet.class).getClass()));
         assertTrue(ex.getMessage().contains("Unable to unwrap"));
     }
+
+
+    public String getResponseBodyFromPath(String path) throws IOException {
+        return TestResources.readResourceAsString(path);
+    }
+
+    public void setupStubForConnect(final WireMockServer mockServer, final String contextPath) {
+        // get Connection stub
+        mockServer.stubFor(get(urlEqualTo(contextPath))
+                .withHeader("Accept", equalTo("application/json"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(MockES.INSTANCE.getConnectionResponse())));
+    }
+
 }

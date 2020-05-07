@@ -14,66 +14,62 @@
  *
  */
 
-package com.amazon.opendistroforelasticsearch.jdbc.protocol;
+package com.amazon.opendistroforelasticsearch.jdbc.protocol.http;
+
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.JdbcQueryParam;;
+import com.amazon.opendistroforelasticsearch.jdbc.protocol.QueryRequest;
+
 
 import java.util.List;
 import java.util.Objects;
 
-public class JdbcQueryRequest implements QueryRequest {
+/**
+ * Bean to encapsulate cursor ID
+ *
+ *  @author abbas hussain
+ *  @since 07.05.20
+ **/
+public class JdbcCursorQueryRequest implements QueryRequest {
 
-    private String statement;
-    private int fetchSize;
-    List<JdbcQueryParam> parameters;
+    String cursor;
 
-    public JdbcQueryRequest(String sql) {
-        this.statement = sql;
+    public JdbcCursorQueryRequest(String cursor) {
+        this.cursor = cursor;
     }
-
-    public JdbcQueryRequest(String sql, int fetchSize) {
-        this.statement = sql;
-        this.fetchSize = fetchSize;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof JdbcQueryRequest)) return false;
-        JdbcQueryRequest that = (JdbcQueryRequest) o;
-        return Objects.equals(statement, that.statement) &&
+        if (!(o instanceof JdbcCursorQueryRequest)) return false;
+        JdbcCursorQueryRequest that = (JdbcCursorQueryRequest) o;
+        return Objects.equals(cursor, that.cursor) &&
                 Objects.equals(getParameters(), that.getParameters());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(statement, getParameters());
+        return Objects.hash(cursor, getParameters());
     }
 
     @Override
     public String getQuery() {
-        return statement;
+        return cursor;
     }
 
     @Override
     public List<JdbcQueryParam> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(List<JdbcQueryParam> parameters) {
-        this.parameters = parameters;
+        return null;
     }
 
     @Override
     public int getFetchSize() {
-        return fetchSize;
+        return 0;
     }
 
     @Override
     public String toString() {
         return "JdbcQueryRequest{" +
-                "statement='" + statement + '\'' +
-                ", fetchSize='" + fetchSize + '\'' +
-                ", parameters=" + parameters +
+                "cursor='" + cursor + '\'' +
                 '}';
     }
 }

@@ -41,6 +41,8 @@ public class JsonQueryResponse implements QueryResponse {
 
     private int status;
 
+    private String cursor;
+
     private JsonRequestError error;
 
     @Override
@@ -73,6 +75,10 @@ public class JsonQueryResponse implements QueryResponse {
         this.status = status;
     }
 
+    public void setCursor(String cursor) {
+        this.cursor = cursor;
+    }
+
     public void setError(JsonRequestError error) {
         this.error = error;
     }
@@ -93,6 +99,11 @@ public class JsonQueryResponse implements QueryResponse {
     }
 
     @Override
+    public String getCursor() {
+        return cursor;
+    }
+
+    @Override
     public RequestError getError() {
         return error;
     }
@@ -105,6 +116,7 @@ public class JsonQueryResponse implements QueryResponse {
         return getSize() == response.getSize() &&
                 getTotal() == response.getTotal() &&
                 getStatus() == response.getStatus() &&
+                getCursor() == response.getCursor() &&
                 Objects.equals(schema, response.schema) &&
                 Objects.equals(getDatarows(), response.getDatarows()) &&
                 Objects.equals(getError(), response.getError());
@@ -112,13 +124,14 @@ public class JsonQueryResponse implements QueryResponse {
 
     @Override
     public int hashCode() {
-        return Objects.hash(schema, getDatarows(), getSize(), getTotal(), getStatus(), getError());
+        return Objects.hash(schema, getDatarows(), getSize(), getTotal(), getStatus(), getCursor(), getError());
     }
 
     @Override
     public String toString() {
         return "JsonQueryResponse{" +
                 "schema=" + schema +
+                "cursor=" + cursor +
                 ", datarows=" + datarows +
                 ", size=" + size +
                 ", total=" + total +
