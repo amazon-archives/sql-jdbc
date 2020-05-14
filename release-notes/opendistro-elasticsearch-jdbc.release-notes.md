@@ -1,7 +1,3 @@
-## 2020-05-07, Version 1.7.0.0 (Current)
-### Changes
-* Feature [#76](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/76): Cursor integration. (issue: [#74](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/74))
-
 ## 2020-04-29, Version 1.6.1.0
 ### Enhancement
 * Enhancement [#72](https://github.com/opendistro-for-elasticsearch/sql-jdbc/pull/72): Use default holdability for prepareStatement. (issue: [#63](https://github.com/opendistro-for-elasticsearch/sql-jdbc/issues/63))
