@@ -164,7 +164,7 @@ publishing {
         }
         maven {
             name = "sonatype-staging"
-            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            url "https://aws.oss.sonatype.org/service/local/staging/deploy/maven2"
             credentials {
                 username project.hasProperty('ossrhUsername') ? project.property('ossrhUsername') : ''
                 password project.hasProperty('ossrhPassword') ? project.property('ossrhPassword') : ''
