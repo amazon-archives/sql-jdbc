@@ -1,3 +1,6 @@
+__NOTE:__ We have merged this repository into [Open Distro for Elasticsearch SQL](https://github.com/opendistro-for-elasticsearch/sql) as of 7/9/20. Please visit [here](https://github.com/opendistro-for-elasticsearch/sql/tree/master/sql-jdbc) for latest updates on SQL JDBC. Thanks.
+---
+
 ## Open Distro for ElasticSearch - JDBC
 
 This is the driver for JDBC connectivity to a cluster running with Open Distro for Elasticsearch SQL support.
